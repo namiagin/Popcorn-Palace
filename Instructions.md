@@ -16,7 +16,7 @@ git clone https://github.com/namiagin/Popcorn-Palace.git
 2. Navigate to the project directory
 
 ```bash
-cd popcorn_palace_typescript
+cd Popcorn-Palace
 ```
 
 3. Install dependencies
