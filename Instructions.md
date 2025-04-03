@@ -10,7 +10,7 @@ Ensure you have the following installed on your machine:
 
 1. Clone the Repository
 ```bash
-git clone git@github.com:your-username/popcorn_palace_typescript.git
+git clone https://github.com/namiagin/Popcorn-Palace.git
 ```
 
 2. Navigate to the project directory
