@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popcorn Palace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --secondary-color: #ff4081;
+            --accent-color: #00bcd4;
+            --background-color: #f5f5f5;
+            --text-color: #333;
+            --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            --gradient-primary: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            --gradient-accent: linear-gradient(135deg, #00bcd4 0%, #4dd0e1 100%);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: var(--gradient-primary);
+            box-shadow: var(--card-shadow);
+            padding: 1rem 2rem;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white !important;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .movie-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .movie-form h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.2rem rgba(0, 188, 212, 0.25);
+        }
+
+        .btn-primary {
+            background: var(--gradient-accent);
+            border: none;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .movie-card {
+            background: white;
+            border: none;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .movie-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .movie-card .card-body {
+            padding: 1.5rem;
+        }
+
+        .movie-card .card-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+            font-family: 'Calibri', 'Candara', 'Segoe', 'Segoe UI', 'Optima', Arial, sans-serif;
+        }
+
+        .movie-card .card-text {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .showtime-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0.4rem 0.6rem;
+            margin: 0.3rem 0;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .showtime-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .showtime-btn:hover {
+            transform: translateX(10px);
+        }
+
+        .showtime-btn:hover::before {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .showtime-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+            box-shadow: var(--hover-shadow);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: var(--gradient-primary);
+            border-radius: 20px 20px 0 0;
+            padding: 1.5rem;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-footer {
+            border-radius: 0 0 20px 20px;
+            padding: 1.5rem;
+        }
+
+        .seat-grid {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            margin: 2rem 0;
+        }
+
+        .seat {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .seat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .seat:hover:not(.booked) {
+            transform: scale(1.1);
+        }
+
+        .seat:hover:not(.booked)::before {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .seat.available {
+            background: var(--gradient-accent);
+            color: white;
+        }
+
+        .seat.selected {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .seat.booked {
+            background: #ff9800;
+            cursor: not-allowed;
+        }
+
+        .booking-summary {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            margin-top: 2rem;
+        }
+
+        .booking-summary h3 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .screen {
+            background: #e0e0e0;
+            height: 6px;
+            width: 100%;
+            margin: 2rem 0;
+            position: relative;
+            border-radius: 50%;
+            box-shadow: 0 1px 10px rgba(0,0,0,0.3);
+        }
+
+        .screen:before {
+            content: "SCREEN";
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--primary-color);
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-outline-primary {
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 0.2rem 0.4rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.7rem;
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--gradient-accent);
+            color: white;
+            transform: translateY(-2px);
+            border-color: transparent;
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .movie-form {
+                padding: 1.5rem;
+            }
+            
+            .modal-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-film me-2"></i>Popcorn Palace
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Add Movie Form -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Add New Movie</h5>
+            </div>
+            <div class="card-body">
+                <form id="addMovieForm">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="movieTitle" placeholder="Title" required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" id="movieGenre" placeholder="Genre" required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" class="form-control" id="movieDuration" placeholder="Duration (min)" required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" step="0.1" class="form-control" id="movieRating" placeholder="Rating" required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" class="form-control" id="movieYear" placeholder="Release Year" required>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Movies List -->
+        <div class="row" id="moviesList">
+            <!-- Movies will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Add Showtime Modal -->
+    <div class="modal fade" id="addShowtimeModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Add Showtime</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addShowtimeForm">
+                        <input type="hidden" id="showtimeMovieId">
+                        <div class="mb-3">
+                            <label class="form-label">Theater</label>
+                            <input type="text" class="form-control" id="showtimeTheater" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Price</label>
+                            <input type="number" step="0.01" class="form-control" id="showtimePrice" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Start Time</label>
+                            <input type="datetime-local" class="form-control" id="showtimeStartTime" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">End Time</label>
+                            <input type="datetime-local" class="form-control" id="showtimeEndTime" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="confirmAddShowtime">Add Showtime</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div class="modal fade" id="bookingModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Book Tickets</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="screen">
+                        <i class="fas fa-film me-2"></i>SCREEN
+                    </div>
+                    <div class="seat-grid" id="seatGrid">
+                        <!-- Seats will be generated here -->
+                    </div>
+                    <div class="booking-summary">
+                        <h6>Booking Summary</h6>
+                        <p>Selected Seats: <span id="selectedSeats">0</span></p>
+                        <p>Total Price: $<span id="totalPrice">0.00</span></p>
+                        <form id="bookingForm">
+                            <input type="hidden" id="bookingShowtimeId">
+                            <div class="mb-3">
+                                <label class="form-label">Your Name</label>
+                                <input type="text" class="form-control" id="bookingName" required>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="confirmBooking">Book Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_URL = 'http://localhost:3000';
+        let movies = [];
+        let bookingModal;
+        let addShowtimeModal;
+        let selectedSeats = new Set();
+        let currentShowtime = null;
+
+        // Initialize Bootstrap modals
+        document.addEventListener('DOMContentLoaded', () => {
+            bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+            addShowtimeModal = new bootstrap.Modal(document.getElementById('addShowtimeModal'));
+            loadMovies();
+        });
+
+        // Load all movies
+        async function loadMovies() {
+            try {
+                // Load movies
+                const moviesResponse = await fetch(`${API_URL}/movies/all`);
+                movies = await moviesResponse.json();
+
+                // Load showtimes for each movie
+                for (let movie of movies) {
+                    const showtimesResponse = await fetch(`${API_URL}/showtimes/movie/${movie.id}`);
+                    const showtimes = await showtimesResponse.json();
+                    movie.showtimes = showtimes;
+                }
+
+                displayMovies();
+            } catch (error) {
+                console.error('Error loading movies:', error);
+                alert('Failed to load movies');
+            }
+        }
+
+        // Display movies in the UI
+        function displayMovies() {
+            const moviesList = document.getElementById('moviesList');
+            moviesList.innerHTML = movies.map(movie => `
+                <div class="col-md-4 mb-4">
+                    <div class="card movie-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">${movie.title}</h5>
+                                <button class="btn btn-sm btn-outline-primary" onclick="openAddShowtimeModal(${movie.id}, '${movie.title}')">
+                                    <i class="fas fa-plus"></i> Add Showtime
+                                </button>
+                            </div>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    <i class="fas fa-film me-1"></i>${movie.genre} • 
+                                    <i class="fas fa-clock me-1"></i>${movie.duration}min • 
+                                    <i class="fas fa-star me-1"></i>${movie.rating}/10
+                                </small>
+                            </p>
+                            <p class="card-text">
+                                <i class="fas fa-calendar me-1"></i>Release Year: ${movie.releaseYear}
+                            </p>
+                            ${movie.showtimes ? `
+                                <div class="showtime-list">
+                                    ${movie.showtimes.map(showtime => `
+                                        <button class="showtime-btn" 
+                                                onclick="openBookingModal(${showtime.id}, '${movie.title}', ${showtime.price})">
+                                            <i class="fas fa-clock me-2"></i>
+                                            ${new Date(showtime.startTime).toLocaleString()} - 
+                                            <i class="fas fa-ticket-alt me-2"></i>$${showtime.price}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Add new movie
+        document.getElementById('addMovieForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const movieData = {
+                title: document.getElementById('movieTitle').value,
+                genre: document.getElementById('movieGenre').value,
+                duration: parseInt(document.getElementById('movieDuration').value),
+                rating: parseFloat(document.getElementById('movieRating').value),
+                releaseYear: parseInt(document.getElementById('movieYear').value)
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/movies`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(movieData)
+                });
+
+                if (response.ok) {
+                    loadMovies();
+                    e.target.reset();
+                } else {
+                    throw new Error('Failed to add movie');
+                }
+            } catch (error) {
+                console.error('Error adding movie:', error);
+                alert('Failed to add movie');
+            }
+        });
+
+        // Generate seat grid
+        function generateSeatGrid(showtimeId) {
+            const seatGrid = document.getElementById('seatGrid');
+            seatGrid.innerHTML = '';
+            selectedSeats.clear();
+            updateBookingSummary();
+
+            // Generate 10 rows with 10 seats each
+            for (let row = 1; row <= 10; row++) {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'seat-row';
+                
+                // Add row label
+                const rowLabel = document.createElement('div');
+                rowLabel.className = 'seat-label';
+                rowLabel.textContent = row;
+                rowDiv.appendChild(rowLabel);
+
+                // Add seats for this row
+                for (let col = 1; col <= 10; col++) {
+                    const seatNumber = (row - 1) * 10 + col;
+                    const seat = document.createElement('div');
+                    seat.className = 'seat';
+                    seat.textContent = col;
+                    seat.onclick = () => toggleSeat(seatNumber, showtimeId);
+                    rowDiv.appendChild(seat);
+                }
+                seatGrid.appendChild(rowDiv);
+            }
+
+            // Load existing bookings for this showtime
+            loadBookedSeats(showtimeId);
+        }
+
+        // Load booked seats for a showtime
+        async function loadBookedSeats(showtimeId) {
+            try {
+                const response = await fetch(`${API_URL}/bookings/showtime/${showtimeId}`);
+                const bookings = await response.json();
+                
+                // Mark booked seats
+                bookings.forEach(booking => {
+                    const row = Math.floor((booking.seatNumber - 1) / 10) + 1;
+                    const col = ((booking.seatNumber - 1) % 10) + 1;
+                    const seat = document.querySelector(`.seat-row:nth-child(${row}) .seat:nth-child(${col + 1})`);
+                    if (seat) {
+                        seat.classList.add('booked');
+                        seat.classList.remove('selected');
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading booked seats:', error);
+            }
+        }
+
+        // Toggle seat selection
+        function toggleSeat(seatNumber, showtimeId) {
+            const row = Math.floor((seatNumber - 1) / 10) + 1;
+            const col = ((seatNumber - 1) % 10) + 1;
+            const seat = document.querySelector(`.seat-row:nth-child(${row}) .seat:nth-child(${col + 1})`);
+            
+            if (seat.classList.contains('booked')) return;
+
+            if (selectedSeats.has(seatNumber)) {
+                selectedSeats.delete(seatNumber);
+                seat.classList.remove('selected');
+            } else {
+                selectedSeats.add(seatNumber);
+                seat.classList.add('selected');
+            }
+            updateBookingSummary();
+        }
+
+        // Update booking summary
+        function updateBookingSummary() {
+            const selectedSeatsList = Array.from(selectedSeats)
+                .map(seatNumber => {
+                    const row = Math.floor((seatNumber - 1) / 10) + 1;
+                    const col = ((seatNumber - 1) % 10) + 1;
+                    return `${row}-${col}`;
+                })
+                .join(', ');
+
+            document.getElementById('selectedSeats').textContent = selectedSeatsList || 'None';
+            document.getElementById('totalPrice').textContent = 
+                (selectedSeats.size * currentShowtime.price).toFixed(2);
+        }
+
+        // Open booking modal
+        function openBookingModal(showtimeId, movieTitle, price) {
+            currentShowtime = { id: showtimeId, price };
+            document.getElementById('bookingShowtimeId').value = showtimeId;
+            document.getElementById('bookingModal').querySelector('.modal-title').textContent = 
+                `Book Tickets - ${movieTitle}`;
+            generateSeatGrid(showtimeId);
+            bookingModal.show();
+        }
+
+        // Handle booking confirmation
+        document.getElementById('confirmBooking').addEventListener('click', async () => {
+            const showtimeId = parseInt(document.getElementById('bookingShowtimeId').value);
+            const name = document.getElementById('bookingName').value;
+
+            if (selectedSeats.size === 0) {
+                alert('Please select at least one seat');
+                return;
+            }
+
+            if (!name) {
+                alert('Please enter your name');
+                return;
+            }
+
+            try {
+                // Book each selected seat
+                for (const seatNumber of selectedSeats) {
+                    const response = await fetch(`${API_URL}/bookings`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            showtimeId,
+                            seatNumber,
+                            userId: name
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.message || 'Failed to create booking');
+                    }
+                }
+
+                alert('Booking successful!');
+                // Reload the booked seats to show them as taken
+                loadBookedSeats(showtimeId);
+                // Clear selected seats
+                selectedSeats.clear();
+                updateBookingSummary();
+                bookingModal.hide();
+                loadMovies();
+            } catch (error) {
+                console.error('Error creating booking:', error);
+                alert(error.message || 'Failed to create booking');
+            }
+        });
+
+        // Open add showtime modal
+        function openAddShowtimeModal(movieId, movieTitle) {
+            document.getElementById('showtimeMovieId').value = movieId;
+            document.getElementById('addShowtimeModal').querySelector('.modal-title').textContent = 
+                `Add Showtime - ${movieTitle}`;
+            addShowtimeModal.show();
+        }
+
+        // Handle add showtime confirmation
+        document.getElementById('confirmAddShowtime').addEventListener('click', async () => {
+            const movieId = parseInt(document.getElementById('showtimeMovieId').value);
+            const showtimeData = {
+                movieId,
+                theater: document.getElementById('showtimeTheater').value,
+                price: parseFloat(document.getElementById('showtimePrice').value),
+                startTime: document.getElementById('showtimeStartTime').value,
+                endTime: document.getElementById('showtimeEndTime').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/showtimes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(showtimeData)
+                });
+
+                if (response.ok) {
+                    alert('Showtime added successfully!');
+                    addShowtimeModal.hide();
+                    document.getElementById('addShowtimeForm').reset();
+                    loadMovies();
+                } else {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Failed to add showtime');
+                }
+            } catch (error) {
+                console.error('Error adding showtime:', error);
+                alert(error.message || 'Failed to add showtime');
+            }
+        });
+    </script>
+</body>
+</html> 
